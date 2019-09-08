@@ -22,7 +22,7 @@ export default class Routes extends React.Component {
         <>
           <div style={{ minHeight: '100%'}}>
             <MainMenu />
-            <div style={{ paddingTop: 46, minHeight: '100vh' }}>
+            <div style={{ paddingTop: 46 }}>
               <PrivateRoutes />
             </div>
           </div>
