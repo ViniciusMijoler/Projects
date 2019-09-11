@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"projects/back-end/api/handler"
 
-	"./handler"
 	"github.com/gorilla/mux"
 )
 

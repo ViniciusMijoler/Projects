@@ -3,9 +3,8 @@ package util
 import (
 	"encoding/json"
 	"net/http"
+	"projects/back-end/model"
 	"reflect"
-
-	"../model"
 )
 
 //App representa o aplicativo
