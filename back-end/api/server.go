@@ -22,11 +22,16 @@ func (a *App) StartServer() {
 	s := a.Router.PathPrefix("/api/v1").Subrouter()
 	s.HandleFunc("/health", handler.HealthCheck).Methods(http.MethodGet)
 
-	s.HandleFunc("/projects", handler.InsertProject).Methods(http.MethodPost)
-	s.HandleFunc("/projects/{id:[0-9]+}", handler.UpdateProject).Methods(http.MethodPut)
-	s.HandleFunc("/projects/{id:[0-9]+}", handler.DeleteProject).Methods(http.MethodDelete)
-	s.HandleFunc("/projects/{id:[0-9]+}", handler.GetProject).Methods(http.MethodGet)
-	s.HandleFunc("/projects", handler.GetProjects).Methods(http.MethodGet)
+	s.HandleFunc("/person", handler.InsertPerson).Methods(http.MethodPost)
+	// s.HandleFunc("/person/{id:[0-9]+}", handler.UpdatePerson).Methods(http.MethodPut)
+	// s.HandleFunc("/person/{id:[0-9]+}", handler.DeletePerson).Methods(http.MethodDelete)
+	// s.HandleFunc("/person/{id:[0-9]+}", handler.GetPerson).Methods(http.MethodGet)
+
+	s.HandleFunc("/project", handler.InsertProject).Methods(http.MethodPost)
+	s.HandleFunc("/project/{id:[0-9]+}", handler.UpdateProject).Methods(http.MethodPut)
+	s.HandleFunc("/project/{id:[0-9]+}", handler.DeleteProject).Methods(http.MethodDelete)
+	s.HandleFunc("/project", handler.GetProjects).Methods(http.MethodGet)
+	s.HandleFunc("/project/{id:[0-9]+}", handler.GetProject).Methods(http.MethodGet)
 
 	a.Router.Handle("/api/v1/{_:.*}", a.Router)
 	port := 10001

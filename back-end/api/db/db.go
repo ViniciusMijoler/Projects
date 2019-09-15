@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // pure Go Postgres driver for the database/sql package
 )
 
 //DB do aplicativo ...
