@@ -1,6 +1,6 @@
 import * as React from 'react';
 import MenuStore from './store';
-import { Dropdown, Menu } from 'semantic-ui-react';
+import { Menu, Sidebar } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import NewRouterStore from '../../mobx/router.store';
 
@@ -37,42 +37,40 @@ export default class MainMenu extends React.Component<Props> {
     const { activated } = this.props.mainMenu!;
 
     return (
-      <div className={'nav'} style={{ position: 'fixed', width: '100%' }}>
+      <>
+        <Sidebar
+          as={Menu}
+          vertical
+          visible={true}
+          className={'sidemenu-app text-white'}
+          width="thin">
+            <Menu.Header>
+              <div style={{ fontWeight: "bold", fontSize: 20, textAlign: "center", padding: 15}}>
+                Projects
+              </div>
+            </Menu.Header>
 
-        <Menu color={'blue'} inverted={true} size='large' secondary={true} stackable={true}>
-          <Menu.Item className='logo'>
-            TEMPLATE
-          </Menu.Item>
+            <Menu.Item
+              id='home-menu'
+              name='home'
+              active={activated === 'home'}
+              url='home'
+              className={'text-white'}
+              onClick={this.handleItemClick}>
+              Home
+            </Menu.Item>
 
-          <Menu.Item
-            id='home-menu'
-            name='home'
-            active={activated === 'home'}
-            url='home'
-            onClick={this.handleItemClick}>
-            Home
-          </Menu.Item>
-
-          <Menu.Item
-            id='projects-menu'
-            name='projects'
-            active={activated === 'projects'}
-            url='projects'
-            onClick={this.handleItemClick}>
-            Projetos
-          </Menu.Item>
-
-          <Menu.Menu position='right'>
-            <Dropdown item={true} text="Tio Patinhas">
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={this.logout}>
-                  Sair</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Menu.Menu>
-        </Menu>
-      </div>
+            <Menu.Item
+              id='projects-menu'
+              name='projects'
+              active={activated === 'projects'}
+              url='projects'
+              className={'text-white'}
+              onClick={this.handleItemClick}>
+              Projetos
+            </Menu.Item>
+        </Sidebar>
+      </>
     );
   }
 }

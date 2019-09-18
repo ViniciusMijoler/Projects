@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import NotFound from '../containers/not-found';
 import MainMenu from '../components/main-menu';
+import HeaderMenu from '../components/header-menu';
 import PrivateRoutes from './private-routes';
 
 // @ts-ignore
@@ -20,12 +21,15 @@ export default class Routes extends React.Component {
     return (
       <Switch>
         <>
-          <div style={{ minHeight: '100%'}}>
-            <MainMenu />
-            <div style={{ paddingTop: 46 }}>
+        <div style={{ paddingTop: 50 }}>
+          <HeaderMenu />
+          <MainMenu />
+          <div style={{ paddingLeft: 200, position: 'fixed', height: '100%', width: '100%', background: '#f0f0f7', overflowX: 'auto' }}>
+            <div style={{ position: 'relative' }}>
               <PrivateRoutes />
             </div>
           </div>
+        </div>
         </>
         <Route render={props => <NotFound {...props} />} />
       </Switch>

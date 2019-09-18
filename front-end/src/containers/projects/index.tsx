@@ -13,7 +13,7 @@ export default class Projects extends React.Component<Props> {
   
   render() {
     return (
-      <Container style={{ padding: '2em 0em' }}>
+      <Container>
           <Header as='h2'>Projetos</Header>
           <Grid.Column>
           </Grid.Column>

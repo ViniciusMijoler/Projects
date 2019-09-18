@@ -12,3 +12,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.sidemenu-app {
+  background-color: #43425d !important;
+} 
+
+.text-white {
+  color: white !important;
+}
+
+.ui.vertical.menu .active.item {
+  background: rgba(0,0,0,.25) !important;
+}
+
+.ui.thin.left.sidebar, .ui.thin.right.sidebar {
+  width: 200px !important;
+}
