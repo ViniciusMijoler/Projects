@@ -8,9 +8,10 @@ import { Provider } from 'mobx-react';
 import { router } from './mobx/';
 import { Router } from 'react-router-dom';
 import { syncHistoryWithStore } from 'mobx-react-router';
+import Loading from './components/loading';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css';
-import Loading from './components/loading';
+import "react-datepicker/dist/react-datepicker.css";
 
 const rootElement = document.getElementById('root');
 const browserHistory = createBrowserHistory();
