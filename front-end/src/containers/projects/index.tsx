@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Header, Grid } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import ProjectsStore from './store';
 
@@ -13,11 +13,13 @@ export default class Projects extends React.Component<Props> {
   
   render() {
     return (
-      <Container>
+      <div style={{ paddingTop: 30, paddingLeft: 40, paddingRight: 40, paddingBottom: 30 }}>
           <Header as='h2'>Projetos</Header>
-          <Grid.Column>
-          </Grid.Column>
-      </Container>
+          <div style={{ backgroundColor: '#fff', padding: 20 }} >
+            <Header as='h3'>Filtros</Header>
+            
+          </div>
+      </div>
     );
 
   }

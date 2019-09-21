@@ -1,6 +1,5 @@
 import * as React from 'react';
 import MenuStore from '../main-menu/store';
-import {  } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import NewRouterStore from '../../mobx/router.store';
 
