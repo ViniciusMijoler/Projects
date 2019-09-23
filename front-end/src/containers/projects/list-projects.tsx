@@ -1,0 +1,120 @@
+import * as React from 'react';
+import { Header, Segment, Form, FormGroup, Button, Grid } from 'semantic-ui-react';
+import { observer } from 'mobx-react';
+import ReactDatePicker from "react-datepicker";
+import ProjectsStore from './store';
+import './index.css';
+import { getDate } from '../../util';
+
+interface Props {
+  projects: ProjectsStore
+}
+
+@observer
+export default class ListProjects extends React.Component<Props> {
+  
+  render() {
+    const {
+      toggleScreen,
+      handleChangeFilter,
+      handleDateFilter,
+      filter
+    } = this.props.projects
+
+    return (
+      <>
+        <Header as='h2'>
+          Projetos
+        </Header>
+        <Segment>
+          <Grid style={{ marginBottom: 5 }}>
+            <Grid.Row style={{ justifyContent: 'space-between' }}>
+              <Grid.Column width="8">
+                <Header as='h2'>
+                  Filtro
+                </Header>
+              </Grid.Column>
+              <Grid.Column width="8">
+                <Button
+                  title="Novo"
+                  type='submit'
+                  floated='right'
+                  color='green'
+                  size='medium'
+                  onClick={toggleScreen}>
+                  Novo
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <Form>
+            <FormGroup widths='equal'>
+              <Form.Field>
+                <Form.Input
+                  id="nome_projeto" 
+                  label='Nome projeto'
+                  value={filter.nome_projeto}
+                  onChange={handleChangeFilter}/>
+              </Form.Field>
+
+              <Form.Field>
+                <Form.Input
+                  id="nome_empresa" 
+                  label='Nome empresa'
+                  value={filter.nome_empresa}
+                  onChange={handleChangeFilter}/>
+              </Form.Field>
+              
+              <Form.Field>
+                <Form.Input
+                  id="palavras_chave" 
+                  label='Palavras chave'
+                  value={filter.palavras_chave}
+                  onChange={handleChangeFilter}/>
+              </Form.Field>
+            </FormGroup>
+            
+            <FormGroup widths="equal">
+              <Form.Field width="16">
+                <Form.Input
+                  id="area_projeto" 
+                  label='Area projeto'
+                  value={filter.area_projeto}
+                  onChange={handleChangeFilter}/>
+              </Form.Field>
+
+              <Form.Field width="3">
+                <label>Data Limite</label>
+                <ReactDatePicker
+                  id="data"
+                  selected={getDate(filter.data)}
+                  isClearable
+                  value={filter.data}
+                  dateFormat='dd/MM/yyyy'
+                  onChange={(date: any) => handleDateFilter(date, 'data')}
+                  showYearDropdown
+                  showMonthDropdown/>
+              </Form.Field>
+              
+            </FormGroup>
+
+            <Form.Group className='row-reverse'>
+              <Form.Field className='no-label' width="3">
+                <Button
+                  title="Pesquisar"
+                  type='submit'
+                  floated='right'
+                  fluid
+                  color='blue'
+                  size='medium'>
+                  Filtrar
+                </Button>
+              </Form.Field>
+            </Form.Group>
+          </Form>
+        </Segment>
+      </>
+    );
+
+  }
+}

@@ -28,10 +28,10 @@ func (a *App) StartServer() {
 	// s.HandleFunc("/person/{id:[0-9]+}", handler.GetPerson).Methods(http.MethodGet)
 
 	s.HandleFunc("/project", handler.InsertProject).Methods(http.MethodPost)
-	s.HandleFunc("/project/{id:[0-9]+}", handler.UpdateProject).Methods(http.MethodPut)
-	s.HandleFunc("/project/{id:[0-9]+}", handler.DeleteProject).Methods(http.MethodDelete)
+	// s.HandleFunc("/project/{id:[0-9]+}", handler.UpdateProject).Methods(http.MethodPut)
+	// s.HandleFunc("/project/{id:[0-9]+}", handler.DeleteProject).Methods(http.MethodDelete)
 	s.HandleFunc("/project", handler.GetProjects).Methods(http.MethodGet)
-	s.HandleFunc("/project/{id:[0-9]+}", handler.GetProject).Methods(http.MethodGet)
+	// s.HandleFunc("/project/{id:[0-9]+}", handler.GetProject).Methods(http.MethodGet)
 
 	a.Router.Handle("/api/v1/{_:.*}", a.Router)
 	port := 10001

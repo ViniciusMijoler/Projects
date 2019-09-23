@@ -17,7 +17,6 @@ func (a *App) ResponseWithError(w http.ResponseWriter, code int, message string,
 	var m model.ResponseError
 	m.DeveloperMessage = message
 	m.UserMessage = "Erro"
-	m.ErrorCode = code
 	m.MoreInfo = moreInfo
 	responseWithError(w, code, m)
 }
@@ -36,6 +35,14 @@ func (a *App) ResponseWithJSON(w http.ResponseWriter, code int, payload interfac
 	}
 
 	response, _ := json.Marshal(r)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(response)
+}
+
+//ResponsePostWithJSON corresponde
+func (a *App) ResponsePostWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+	response, _ := json.Marshal(payload)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(response)

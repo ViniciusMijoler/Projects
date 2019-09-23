@@ -32,12 +32,16 @@ func InsertProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-	// err = p.InsertProject(db)
+	msg, err := p.InsertProject(db)
 	if err != nil {
-		t.ResponseWithError(w, http.StatusBadRequest, "Erro ao inserir Situacao", "")
+		t.ResponseWithError(w, http.StatusBadRequest, "Erro ao inserir Projeto", err.Error())
 		return
 	}
-	t.ResponseWithJSON(w, http.StatusOK, p, 0, 0)
+	if msg != "" {
+		t.ResponseWithError(w, http.StatusOK, "Erro ao inserir Pessoa", msg)
+		return
+	}
+	t.ResponsePostWithJSON(w, http.StatusOK, p)
 }
 
 //UpdateProject ...
@@ -140,7 +144,7 @@ func GetProject(w http.ResponseWriter, r *http.Request) {
 
 //GetProjects ...
 func GetProjects(w http.ResponseWriter, r *http.Request) {
-	var p model.Project
+	var p model.ProjectFilter
 	var t util.App
 	var d db.DB
 	err := d.Connection()
@@ -151,18 +155,17 @@ func GetProjects(w http.ResponseWriter, r *http.Request) {
 	db := d.DB
 	defer db.Close()
 
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	nome := r.FormValue("nome")
+	p.NomeProjeto = r.FormValue("nome_projeto")
+	p.NomeEmpresa = r.FormValue("nome_empresa")
+	p.PalavrasChaves = r.FormValue("palavras_chaves")
+	p.AreaProjeto = r.FormValue("area_projeto")
+	p.DataLimite = r.FormValue("data_limite")
 
-	p.ID = int64(id)
-	p.Nome = nome
-
-	projects := []model.Project{}
-	// projects, err := p.GetProjects(db)
+	projects, err := p.GetProjects(db)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			log.Printf("[handler/GetProjects -  Nao ha Projeto com este ID.")
-			t.ResponseWithError(w, http.StatusInternalServerError, "Nao ha Projeto cadastrado.", err.Error())
+			log.Printf("[handler/GetProjects -  Nao ha Projeto com este filtro.")
+			t.ResponseWithError(w, http.StatusInternalServerError, "Nao ha Projetos cadastrados.", err.Error())
 		} else {
 			log.Printf("[handler/GetProjects -  Erro ao tentar buscar Projeto. Erro: %s", err.Error())
 			t.ResponseWithError(w, http.StatusInternalServerError, err.Error(), "")

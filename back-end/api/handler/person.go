@@ -11,7 +11,7 @@ import (
 //InsertPerson ...
 func InsertPerson(w http.ResponseWriter, r *http.Request) {
 	var t util.App
-	var dm model.Person
+	var u model.PersonUser
 	var d db.DB
 	err := d.Connection()
 	if err != nil {
@@ -22,17 +22,22 @@ func InsertPerson(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&dm); err != nil {
+	if err := decoder.Decode(&u); err != nil {
 		t.ResponseWithError(w, http.StatusBadRequest, "Invalid request payload", err.Error())
 		return
 	}
 	defer r.Body.Close()
-	err = dm.InsertPerson(db)
+
+	msg, err := u.InsertPerson(db)
 	if err != nil {
-		t.ResponseWithError(w, http.StatusBadRequest, "Erro ao inserir Situacao", "")
+		t.ResponseWithError(w, http.StatusBadRequest, "Erro ao inserir Pessoa", err.Error())
 		return
 	}
-	t.ResponseWithJSON(w, http.StatusOK, dm, 0, 0)
+	if msg != "" {
+		t.ResponseWithError(w, http.StatusOK, "Erro ao inserir Pessoa", msg)
+		return
+	}
+	t.ResponsePostWithJSON(w, http.StatusOK, u)
 }
 
 //UpdatePerson ...

@@ -22,67 +22,82 @@ type Address struct {
 
 //Person struct
 type Person struct {
-	ID            int64   `json:"id"`
-	Status        int64   `json:"status"`
-	DtCadastro    string  `json:"dt_cadastro"`
-	DtAtualizacao string  `json:"dt_atualizacao"`
-	TipoPessoa    int64   `json:"tipo_pessoa"`
-	Nome          string  `json:"nome"`
-	Apelido       string  `json:"apelido"`
-	Email         string  `json:"email"`
-	Telefone      string  `json:"telefone"`
-	Celular       string  `json:"celular"`
-	Facebook      string  `json:"facebook"`
-	Twitter       string  `json:"twitter"`
-	Instagram     string  `json:"instagram"`
-	Linkedin      string  `json:"linkedin"`
-	Endereco      Address `json:"endereco"`
+	ID            int64  `json:"id"`
+	Status        int64  `json:"status"`
+	DtCadastro    string `json:"dt_cadastro"`
+	DtAtualizacao string `json:"dt_atualizacao"`
+	TipoPessoa    int64  `json:"tipo_pessoa"`
+	Nome          string `json:"nome"`
+	Apelido       string `json:"apelido"`
+	Email         string `json:"email"`
+	Telefone      string `json:"telefone"`
+	Celular       string `json:"celular"`
+	Facebook      string `json:"facebook"`
+	Twitter       string `json:"twitter"`
+	Instagram     string `json:"instagram"`
+	Linkedin      string `json:"linkedin"`
+}
+
+//PersonUser struct
+type PersonUser struct {
+	ID       int64  `json:"id"`
+	UserName string `json:"user_name"`
+	Password string `json:"password"`
+	Person   Person `json:"person"`
 }
 
 //InsertPerson ...
-func (c *Person) InsertPerson(db *sql.DB) error {
+func (u *PersonUser) InsertPerson(db *sql.DB) (string, error) {
 	dateNow := time.Now()
 
 	tx, err := db.Begin()
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	{
-		statement, err := tx.Prepare(`INSERT INTO endereco (id, status, dt_cadastro, rua, numero, complemento, bairro, cidade, estado, pais)
-									VALUES (DEFAULT, DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8)
-									RETURNING id`)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
-		err = statement.QueryRow(dateNow, c.Endereco.Rua, c.Endereco.Numero, c.Endereco.Complemento,
-			c.Endereco.Bairro, c.Endereco.Cidade, c.Endereco.Estado, c.Endereco.Pais).Scan(&c.Endereco.ID)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
+	// verify user_name exist
+	count := 0
+	err = tx.QueryRow(`SELECT COUNT(*)
+					FROM usuario
+					WHERE user_name = $1`, u.UserName).Scan(&count)
+	if err != nil {
+		tx.Rollback()
+		return "", err
 	}
-
-	{
-		statement, err := tx.Prepare(`INSERT INTO pessoa (id, status, dt_cadastro, tipo_pessoa, nome, apelido, email, 
-															telefone, celular, facebook, twitter, instagram, linkedin, id_endereco)
-									VALUES (DEFAULT, DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-									RETURNING id`)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
-		err = statement.QueryRow(dateNow, c.TipoPessoa, c.Nome, c.Apelido, c.Email, c.Telefone,
-			c.Celular, c.Facebook, c.Twitter, c.Instagram, c.Linkedin, c.Endereco.ID).Scan(&c.ID)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
+	if count > 0 {
+		tx.Rollback()
+		return "Nome de usuário já cadastrado", nil
 	}
-
+	// create pessoa
+	statement, err := tx.Prepare(`INSERT INTO pessoa(id, status, dt_cadastro, tipo_pessoa, nome, apelido, email, 
+														telefone, celular, facebook, twitter, instagram, linkedin)
+								VALUES (DEFAULT, DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+								RETURNING id`)
+	if err != nil {
+		tx.Rollback()
+		return "", err
+	}
+	err = statement.QueryRow(dateNow, u.Person.TipoPessoa, u.Person.Nome, u.Person.Apelido, u.Person.Email, u.Person.Telefone,
+		u.Person.Celular, u.Person.Facebook, u.Person.Twitter, u.Person.Instagram, u.Person.Linkedin).Scan(&u.Person.ID)
+	if err != nil {
+		tx.Rollback()
+		return "", err
+	}
+	// create usuario
+	statement, err = tx.Prepare(`INSERT INTO usuario(id, status, dt_cadastro, id_pessoa, user_name, password)
+								VALUES (DEFAULT, DEFAULT, $1, $2, $3, $4)
+								RETURNING id`)
+	if err != nil {
+		tx.Rollback()
+		return "", err
+	}
+	err = statement.QueryRow(dateNow, u.Person.ID, u.UserName, u.Password).Scan(u.ID)
+	if err != nil {
+		tx.Rollback()
+		return "", err
+	}
 	tx.Commit()
-	return nil
+	return "", nil
 }
 
 //UpdatePerson ...
