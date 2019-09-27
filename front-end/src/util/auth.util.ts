@@ -6,15 +6,10 @@ export const isLoggedIn = () => {
 };
 
 interface UserData {
-  usu_codigo: number;
-  usu_nome: string;
-  usu_email: string;
+  user_name: string;
+  id_pessoa: number;
+  token: string;
 }
-
-export const getFirstName = (): string => {
-  const user = getUser().usu_nome.split(' ')[0];
-  return user.charAt(0).toUpperCase() + user.slice(1).toLowerCase();
-};
 
 export const getUser = (): UserData => {
   const user = sessionStorage.getItem('auth_token');

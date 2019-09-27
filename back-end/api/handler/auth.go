@@ -32,10 +32,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	user, err := u.Login(db)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			t.ResponsePostWithJSON(w, http.StatusOK, nil)
+			t.ResponsePostWithJSON(w, http.StatusOK, user)
 		} else {
 			t.ResponseWithError(w, http.StatusInternalServerError, "Erro ao validar Usuário", err.Error())
 		}
+		return
 	}
 	t.ResponsePostWithJSON(w, http.StatusOK, user)
 }

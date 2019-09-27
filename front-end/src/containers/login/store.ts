@@ -3,11 +3,12 @@ import Swal from 'sweetalert2';
 import { setAuth } from '../../util/auth.util';
 import { assign } from '../../util';
 import { success, warning } from '../../components/notifications';
+import { postLogin } from '../../api/auth.api';
 
 export default class LoginStore {
   @observable user_name = '';
   @observable password = '';
-  @observable loading = false;
+  @observable isLoading = false;
 
   @action handleChange = (event: any, select?: any) => {
     const { id, value } = select || event.target;
@@ -16,22 +17,28 @@ export default class LoginStore {
 
   @action handleSubmit = async () => {
     const { user_name, password } = this;
-    this.loading = true
+    this.isLoading = true
     try {
-      if (user_name === 'tatiana@gmail.com' && password === '123') {
-        setAuth("12345678");
-        success("Seja Bem Vindo!")
+      const { data } = await postLogin({ user_name, password })
+      if (data) {
+        setAuth(JSON.stringify(data));
+        success("Seja Bem Vindo!");
       } else {
         warning("Usuário ou Senha incorreta, tente novamente!");
+        throw null;
       }
-      this.loading = false;
+      this.isLoading = false;
     } catch (error) {
-      this.loading = false;
-      Swal.fire({
-        text: 'Ocorreu um erro não esperado.',
-        type: 'error'
-      });
-      throw error;
+      if (error) {
+        this.isLoading = false;
+        Swal.fire({
+          text: 'Ocorreu um erro não esperado.',
+          type: 'error'
+        });
+        throw error;
+      } else {
+        throw null;
+      }
     }
   }
 }

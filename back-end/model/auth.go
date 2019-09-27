@@ -19,7 +19,7 @@ type LoginResponse struct {
 func (u *User) Login(db *sql.DB) (interface{}, error) {
 	// verify user credentials
 	var user LoginResponse
-	err := db.QueryRow(`SELECT user_name, id_pessoa, CONCAT(password, id, 'project') as token
+	err := db.QueryRow(`SELECT user_name, id_pessoa, MD5(CONCAT(password, id, 'project')) as token
 					FROM usuario
 					WHERE user_name = $1 AND password = MD5($2)`, u.UserName, u.Password).Scan(&user.UserName, &user.IDPessoa, &user.Token)
 	if err != nil {

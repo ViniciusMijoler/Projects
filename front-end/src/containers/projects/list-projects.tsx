@@ -30,6 +30,7 @@ export default class ListProjects extends React.Component<Props> {
       return (
         records.map((r) => (
           <Table.Row>
+            <Table.Cell>{r.id}</Table.Cell>
             <Table.Cell>{r.nome}</Table.Cell>
             <Table.Cell>{r.empresa.nome}</Table.Cell>
             <Table.Cell>{r.area_projeto}</Table.Cell>
@@ -110,7 +111,7 @@ export default class ListProjects extends React.Component<Props> {
             </FormGroup>
             
             <FormGroup widths="equal">
-              <Form.Field width="16">
+              <Form.Field width="8">
                 <Form.Input
                   id="area_projeto" 
                   label='Area projeto'
@@ -154,6 +155,7 @@ export default class ListProjects extends React.Component<Props> {
           <Table celled selectable>
             <Table.Header>
               <Table.Row>
+                <Table.HeaderCell>#</Table.HeaderCell>
                 <Table.HeaderCell>Projeto</Table.HeaderCell>
                 <Table.HeaderCell>Empresa</Table.HeaderCell>
                 <Table.HeaderCell>Area</Table.HeaderCell>

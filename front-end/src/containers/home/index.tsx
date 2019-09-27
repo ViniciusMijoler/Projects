@@ -26,7 +26,7 @@ export default class Home extends React.Component<Props> {
     const { routes } = this.props.mainMenu;
 
     return (
-      <Container>
+      <Container style={{ padding: 20 }}>
         <Header color='blue' as='h2'>
           <Header.Content>
             O que deseja acessar?

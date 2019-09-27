@@ -14,11 +14,6 @@ export default class MainMenuStore {
 
   routes: any[] = [
     {
-      title: 'Exemplo',
-      description: 'Exemplo de Descrição',
-      route: 'example',
-    },
-    {
       title: 'Projetos',
       description: '',
       route: 'projects',
