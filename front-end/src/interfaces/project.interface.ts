@@ -1,4 +1,5 @@
 export interface NewProjectInterface {
+    id?: number;
     nome: string;
     id_empresa: number;
     palavras_chaves: string;

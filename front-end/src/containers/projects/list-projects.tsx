@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Header, Segment, Form, FormGroup, Button, Grid } from 'semantic-ui-react';
+import { Header, Segment, Form, FormGroup, Button, Grid, Table, Loader } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import ReactDatePicker from "react-datepicker";
 import ProjectsStore from './store';
@@ -13,11 +13,46 @@ interface Props {
 @observer
 export default class ListProjects extends React.Component<Props> {
   
+  componentDidMount() {
+    const {
+      getProjects
+    } = this.props.projects
+    getProjects()
+  }
+
+  _renderRows = () => {
+    const {
+      records,
+      isLoading
+    } = this.props.projects
+
+    if (!isLoading) {
+      return (
+        records.map((r) => (
+          <Table.Row>
+            <Table.Cell>{r.nome}</Table.Cell>
+            <Table.Cell>{r.empresa.nome}</Table.Cell>
+            <Table.Cell>{r.area_projeto}</Table.Cell>
+          </Table.Row>
+        ))
+      )
+    } else {
+      return (
+        <Table.Row>
+          <Table.Cell >
+            <Loader indeterminate>Preparing Files</Loader>
+          </Table.Cell>
+        </Table.Row>
+      )
+    }
+  }
+
   render() {
     const {
       toggleScreen,
       handleChangeFilter,
       handleDateFilter,
+      handleSubmitFilter,
       filter
     } = this.props.projects
 
@@ -106,12 +141,28 @@ export default class ListProjects extends React.Component<Props> {
                   floated='right'
                   fluid
                   color='blue'
+                  onClick={handleSubmitFilter}
                   size='medium'>
                   Filtrar
                 </Button>
               </Form.Field>
             </Form.Group>
           </Form>
+        </Segment>
+
+        <Segment>
+          <Table celled selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Projeto</Table.HeaderCell>
+                <Table.HeaderCell>Empresa</Table.HeaderCell>
+                <Table.HeaderCell>Area</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {this._renderRows()}
+            </Table.Body>
+          </Table>
         </Segment>
       </>
     );

@@ -23,7 +23,8 @@ export default class NewProject extends React.Component<Props>{
             toggleScreen,
             handleChangeNew,
             handleDateNew,
-            newProject
+            newProject,
+            isLoading
         } = this.props.projects
         return (
             <>
@@ -91,7 +92,7 @@ export default class NewProject extends React.Component<Props>{
                                 <Button.Group>
                                     <Button onClick={toggleScreen}>Cancelar</Button>
                                     <Button.Or text='ou' />
-                                    <Button positive type='submit'>Salvar</Button>
+                                    <Button positive type='submit' loading={isLoading} onClick={this.handleSubmit}>Salvar</Button>
                                 </Button.Group>
                             </Form.Field>
                         </Form.Group>

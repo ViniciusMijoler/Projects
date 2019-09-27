@@ -1,7 +1,7 @@
 import { action, observable } from 'mobx';
 import { NewProjectInterface } from '../../interfaces/project.interface';
 import { assign } from '../../util';
-import { postProject } from '../../api/projects.api';
+import { postProject, getProjects } from '../../api/projects.api';
 
 const initialNewProject = {
   nome: '',
@@ -22,6 +22,8 @@ const initialFilter = {
 
 export default class ProjectsStore {
 
+  private _filter: any = null
+
   @observable newProject: NewProjectInterface = initialNewProject;
 
   @observable filter: {
@@ -34,7 +36,9 @@ export default class ProjectsStore {
 
   @observable records: any[] = [];
 
-  @observable showNewProjectScreen: boolean = true;
+  @observable isLoading: boolean = false;
+
+  @observable showNewProjectScreen: boolean = false;
 
   @action toggleScreen = () => {
     this.showNewProjectScreen = !this.showNewProjectScreen;
@@ -63,16 +67,38 @@ export default class ProjectsStore {
     assign(this.filter, id, data ? data.toISOString().split('T')[0].split('-').reverse().join('/') : '');
   }
 
+  @action handleSubmitFilter = () => {
+    this._filter = { ...this.filter };
+    this.getProjects();
+  }
+
   @action handleSubmit = () => {
+    this.isLoading = true;
     const data = { ...this.newProject }
     postProject(data)
       .then((res) => {
         console.log(res);
-        alert('salvo');
+        this.toggleScreen();
       })
       .catch(err => {
         console.error(err);
       })
+      .finally(() => this.isLoading = false);
+  }
+
+  @action getProjects = () => {
+    this.isLoading = true;
+    const data = { ...this._filter }
+    getProjects(data, 1)
+      .then((res) => {
+        console.log(res.data.records);
+        this.records = res.data.records;
+      })
+      .catch(err => {
+        console.error(err);
+        this.records = [];
+      })
+      .finally(() => this.isLoading = false);
   }
 
 }

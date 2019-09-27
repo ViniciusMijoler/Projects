@@ -85,13 +85,13 @@ func (u *PersonUser) InsertPerson(db *sql.DB) (string, error) {
 	}
 	// create usuario
 	statement, err = tx.Prepare(`INSERT INTO usuario(id, status, dt_cadastro, id_pessoa, user_name, password)
-								VALUES (DEFAULT, DEFAULT, $1, $2, $3, $4)
+								VALUES (DEFAULT, DEFAULT, $1, $2, $3, MD5($4))
 								RETURNING id`)
 	if err != nil {
 		tx.Rollback()
 		return "", err
 	}
-	err = statement.QueryRow(dateNow, u.Person.ID, u.UserName, u.Password).Scan(u.ID)
+	err = statement.QueryRow(dateNow, u.Person.ID, u.UserName, u.Password).Scan(&u.ID)
 	if err != nil {
 		tx.Rollback()
 		return "", err
