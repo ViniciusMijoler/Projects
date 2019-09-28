@@ -5,6 +5,7 @@ import ReactDatePicker from "react-datepicker";
 import ProjectsStore from './store';
 import './index.css';
 import { getDate } from '../../util';
+import { getUser, TipoPessoa } from '../../util/auth.util';
 
 interface Props {
   projects: ProjectsStore
@@ -17,7 +18,13 @@ export default class ListProjects extends React.Component<Props> {
     const {
       getProjects
     } = this.props.projects
-    getProjects()
+    
+    const isCompany = getUser().tipo_pessoa == TipoPessoa.Company;
+    if (isCompany) {
+      getProjects(getUser().id_pessoa)
+    } else {
+      getProjects()
+    }
   }
 
   _renderRows = () => {
@@ -39,10 +46,10 @@ export default class ListProjects extends React.Component<Props> {
       )
     } else {
       return (
-        <Dimmer.Dimmable as={Table.Row} dimmed={true}>
+        <Dimmer.Dimmable as={Table.Row} dimmed={false}>
           <Table.Cell>
-            <Dimmer active>
-              <Loader indeterminate inline='centered'>Carregando dados</Loader>
+            <Dimmer active inverted>
+              <Loader indeterminate inline='centered' inverted>Carregando dados</Loader>
             </Dimmer>
           </Table.Cell>
         </Dimmer.Dimmable>
@@ -59,6 +66,8 @@ export default class ListProjects extends React.Component<Props> {
       filter
     } = this.props.projects
 
+    const isCompany = getUser().tipo_pessoa == TipoPessoa.Company;
+
     return (
       <>
         <Header as='h2'>
@@ -73,15 +82,21 @@ export default class ListProjects extends React.Component<Props> {
                 </Header>
               </Grid.Column>
               <Grid.Column width="8">
-                <Button
-                  title="Novo"
-                  type='submit'
-                  floated='right'
-                  color='green'
-                  size='medium'
-                  onClick={toggleScreen}>
-                  Novo
-                </Button>
+                {
+                  isCompany ? (
+                      <Button
+                        title="Novo"
+                        type='submit'
+                        floated='right'
+                        color='green'
+                        size='medium'
+                        onClick={toggleScreen}>
+                        Novo
+                      </Button>
+                    ) : (
+                      <></>
+                    )
+                }
               </Grid.Column>
             </Grid.Row>
           </Grid>

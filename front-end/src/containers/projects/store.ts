@@ -86,10 +86,10 @@ export default class ProjectsStore {
       .finally(() => this.isLoading = false);
   }
 
-  @action getProjects = () => {
+  @action getProjects = (companyId?: number) => {
     this.isLoading = true;
     const data = { ...this._filter }
-    getProjects(data, 1)
+    getProjects(data, companyId)
       .then((res) => {
         console.log(res.data.records);
         this.records = res.data.records;

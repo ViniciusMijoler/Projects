@@ -119,16 +119,18 @@ func (u *PersonUser) InsertPerson(db *sql.DB) (string, error) {
 // }
 
 //GetPerson ...
-// func (c *Person) GetPerson(db *sql.DB) error {
-// 	err := db.QueryRow(`SELECT CODIGO, NOME, CPF, DATANASCIMENTO, TELEFONE, STATUS
-// 					FROM CIDADAO
-// 					WHERE CODIGO =  ?`, c.CodigoPerson).Scan(&c.CodigoPerson, &c.Nome, &c.Cpf, &c.DataNascimento, &c.Telefone, &c.StatusPerson)
-// 	if err != nil {
-// 		return err
-// 	}
+func (p *Person) GetPerson(db *sql.DB) error {
+	err := db.QueryRow(`SELECT p.status, p.dt_cadastro, COALESCE(CAST(p.dt_atualizacao as varchar), '') as dt_atualizacao, p.tipo_pessoa, 
+							p.nome, p.apelido, p.email, p.telefone, p.celular, p.facebook, p.twitter, p.instagram, p.linkedin
+					FROM pessoa p
+					WHERE id =  $1`, p.ID).Scan(&p.Status, &p.DtCadastro, &p.DtAtualizacao, &p.TipoPessoa, &p.Nome, &p.Apelido, &p.Email,
+		&p.Telefone, &p.Celular, &p.Facebook, &p.Twitter, &p.Instagram, &p.Linkedin)
+	if err != nil {
+		return err
+	}
 
-// 	return err
-// }
+	return err
+}
 
 //GetPersons ...
 // func (c *Person) GetPersons(db *sql.DB) ([]Person, error) {

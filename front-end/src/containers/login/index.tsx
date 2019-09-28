@@ -29,8 +29,12 @@ export default class Login extends React.Component<Props> {
   handleSubmit = async (event: any) => {
     event.preventDefault();
     const { handleSubmit } = this.props.login;
-    await handleSubmit();
-    this.redirect();
+    try {
+      await handleSubmit();
+      this.redirect();
+    } catch (err) {
+      console.log('Ops, verifique o login');
+    }
   }
 
   render() {

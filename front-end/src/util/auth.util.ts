@@ -5,10 +5,21 @@ export const isLoggedIn = () => {
   return user !== null;
 };
 
+export enum TipoPessoa {
+  Company = 0,
+  Developer = 1
+}
+
 interface UserData {
   user_name: string;
   id_pessoa: number;
+  tipo_pessoa: TipoPessoa;
   token: string;
+}
+
+export const getUserName = (): string => {
+  const user_name = getUser().user_name
+  return user_name;
 }
 
 export const getUser = (): UserData => {
@@ -23,7 +34,6 @@ export const getUser = (): UserData => {
     window.location.href = '/login';
     throw new Error('Sua sessão expirou');
   }
-
   try {
     return JSON.parse(user) as UserData;
   } catch (error) {

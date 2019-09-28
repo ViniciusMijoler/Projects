@@ -38,9 +38,13 @@ func (a *App) StartServer() {
 	s.HandleFunc("/auth", handler.Login).Methods(http.MethodPost)
 
 	s.HandleFunc("/person", handler.InsertPerson).Methods(http.MethodPost)
+	s.HandleFunc("/person/{id:[0-9]+}", handler.GetPerson).Methods(http.MethodGet)
 
-	s.HandleFunc("/project", handler.InsertProject).Methods(http.MethodPost)
+	// developer
 	s.HandleFunc("/project", handler.GetProjects).Methods(http.MethodGet)
+
+	// company
+	s.HandleFunc("/project", handler.InsertProject).Methods(http.MethodPost)
 	s.HandleFunc("/project/company/{id:[0-9]+}", handler.GetProjectsByCompany).Methods(http.MethodGet)
 
 	a.Router.Handle("/api/v1/{_:.*}", a.Router)

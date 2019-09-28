@@ -1,11 +1,16 @@
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 	"projects/back-end/api/db"
 	"projects/back-end/model"
 	"projects/back-end/util"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 //InsertPerson ...
@@ -103,40 +108,40 @@ func InsertPerson(w http.ResponseWriter, r *http.Request) {
 // 	t.ResponseWithJSON(w, http.StatusOK, dm, 0, 0)
 // }
 
-// //GetPerson ...
-// func GetPerson(w http.ResponseWriter, r *http.Request) {
-// 	var dm model.Person
-// 	var t util.App
-// 	var d db.DB
-// 	err := d.Connection()
-// 	if err != nil {
-// 		log.Printf("[handler/GetDemanda] -  Erro ao tentar abrir conexao. Erro: %s", err.Error())
-// 		return
-// 	}
-// 	db := d.DB
-// 	defer db.Close()
+//GetPerson ...
+func GetPerson(w http.ResponseWriter, r *http.Request) {
+	var p model.Person
+	var t util.App
+	var d db.DB
+	err := d.Connection()
+	if err != nil {
+		log.Printf("[handler/GetDemanda] -  Erro ao tentar abrir conexao. Erro: %s", err.Error())
+		return
+	}
+	db := d.DB
+	defer db.Close()
 
-// 	vars := mux.Vars(r)
-// 	id, err := strconv.Atoi(vars["id"])
-// 	if err != nil {
-// 		t.ResponseWithError(w, http.StatusBadRequest, "Invalid id", "")
-// 		return
-// 	}
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		t.ResponseWithError(w, http.StatusBadRequest, "Invalid id", "")
+		return
+	}
 
-// 	dm.ID = int64(id)
-// 	err = dm.GetPerson(db)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			log.Printf("[handler/GetPerson -  Nao ha Person com este ID.")
-// 			t.ResponseWithError(w, http.StatusInternalServerError, "Nao ha cidadao com este ID.", err.Error())
-// 		} else {
-// 			log.Printf("[handler/GetPerson -  Erro ao tentar buscar Person. Erro: %s", err.Error())
-// 			t.ResponseWithError(w, http.StatusInternalServerError, err.Error(), "")
-// 		}
-// 		return
-// 	}
-// 	t.ResponseWithJSON(w, http.StatusOK, dm, 0, 0)
-// }
+	p.ID = int64(id)
+	err = p.GetPerson(db)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Printf("[handler/GetPerson -  Nao ha pessoa com este ID.")
+			t.ResponseWithError(w, http.StatusInternalServerError, "Nao ha pessoa com este ID.", err.Error())
+		} else {
+			log.Printf("[handler/GetPerson -  Erro ao tentar buscar pessoa. Erro: %s", err.Error())
+			t.ResponseWithError(w, http.StatusInternalServerError, "Erro ao tentar buscar pessoa", err.Error())
+		}
+		return
+	}
+	t.ResponsePostWithJSON(w, http.StatusOK, p)
+}
 
 // //GetPersons ...
 // func GetPersons(w http.ResponseWriter, r *http.Request) {
