@@ -25,7 +25,8 @@ export default class Routes extends React.Component {
       <Switch>
         <Route  path={`${publicUrl}/login`} component={Login}/>
         {isLoggedIn() ?
-            <div style={{ paddingTop: 50 }}>
+          <>
+            <div>
               <HeaderMenu />
               <MainMenu />
               <div style={{ paddingLeft: 200, position: 'fixed', height: 'calc(100vh - 50px)', width: '100%', background: '#f0f0f7', overflowX: 'auto' }}>
@@ -34,8 +35,9 @@ export default class Routes extends React.Component {
                 </div>
               </div>
             </div>
-            : 
-            <Redirect to={{ pathname: `${publicUrl}/login` }}/>
+          </>
+          : 
+          <Redirect to={{ pathname: `${publicUrl}/login` }}/>
         }
         <Route render={props => <NotFound {...props} />} />
       </Switch>

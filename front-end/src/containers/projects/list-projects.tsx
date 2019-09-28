@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Header, Segment, Form, FormGroup, Button, Grid, Table, Loader } from 'semantic-ui-react';
+import { Header, Segment, Form, FormGroup, Button, Grid, Table, Loader, Dimmer } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
 import ReactDatePicker from "react-datepicker";
 import ProjectsStore from './store';
@@ -29,7 +29,7 @@ export default class ListProjects extends React.Component<Props> {
     if (!isLoading) {
       return (
         records.map((r) => (
-          <Table.Row>
+          <Table.Row key={r.id}>
             <Table.Cell>{r.id}</Table.Cell>
             <Table.Cell>{r.nome}</Table.Cell>
             <Table.Cell>{r.empresa.nome}</Table.Cell>
@@ -39,11 +39,13 @@ export default class ListProjects extends React.Component<Props> {
       )
     } else {
       return (
-        <Table.Row>
-          <Table.Cell >
-            <Loader indeterminate>Preparing Files</Loader>
+        <Dimmer.Dimmable as={Table.Row} dimmed={true}>
+          <Table.Cell>
+            <Dimmer active>
+              <Loader indeterminate inline='centered'>Carregando dados</Loader>
+            </Dimmer>
           </Table.Cell>
-        </Table.Row>
+        </Dimmer.Dimmable>
       )
     }
   }

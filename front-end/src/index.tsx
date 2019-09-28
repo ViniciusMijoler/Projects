@@ -9,9 +9,11 @@ import { router } from './mobx/';
 import { Router } from 'react-router-dom';
 import { syncHistoryWithStore } from 'mobx-react-router';
 import Loading from './components/loading';
+import { ToastContainer } from 'react-toastify';
 import './index.css';
 import 'semantic-ui-css/semantic.min.css';
 import "react-datepicker/dist/react-datepicker.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 const rootElement = document.getElementById('root');
 const browserHistory = createBrowserHistory();
@@ -24,6 +26,7 @@ ReactDOM.render(
       <Router history={history}>
         <Routes />
       </Router>
+      <ToastContainer />
     </>
   </Provider>,
   rootElement

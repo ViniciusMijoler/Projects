@@ -25,20 +25,19 @@ export default class LoginStore {
         success("Seja Bem Vindo!");
       } else {
         warning("Usuário ou Senha incorreta, tente novamente!");
-        throw null;
+        throw false
       }
-      this.isLoading = false;
     } catch (error) {
       if (error) {
-        this.isLoading = false;
         Swal.fire({
           text: 'Ocorreu um erro não esperado.',
           type: 'error'
         });
-        throw error;
-      } else {
-        throw null;
       }
+      throw error;
+    }
+    finally {
+      this.isLoading = false;
     }
   }
 }

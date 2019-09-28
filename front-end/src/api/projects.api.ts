@@ -6,5 +6,9 @@ export const postProject = (data: any) => {
 };
 
 export const getProjects = (params, companyId) => {
-    return axios.request({ method: 'get', baseURL: backend, url: `/project/company/${companyId}`, params });
+    if (companyId) {
+        return axios.request({ method: 'get', baseURL: backend, url: `/project/company/${companyId}`, params });
+    } else {
+        return axios.request({ method: 'get', baseURL: backend, url: `/project/`, params });
+    }
 };
