@@ -1,4 +1,4 @@
-export interface NewProjectInterface {
+export interface ProjectInterface {
     id?: number;
     nome: string;
     id_empresa: number;

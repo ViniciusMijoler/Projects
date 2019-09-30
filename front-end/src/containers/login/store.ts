@@ -25,6 +25,7 @@ export default class LoginStore {
         success("Seja Bem Vindo!");
       } else {
         warning("Usuário ou Senha incorreta, tente novamente!");
+        // eslint-disable-next-line
         throw false
       }
     } catch (error) {

@@ -3,7 +3,6 @@ import { Header, Segment, Form, FormGroup, Button, Grid, Table, Loader, Dimmer }
 import { observer } from 'mobx-react';
 import ReactDatePicker from "react-datepicker";
 import ProjectsStore from './store';
-import './index.css';
 import { getDate } from '../../util';
 import { getUser, TipoPessoa } from '../../util/auth.util';
 
@@ -19,7 +18,7 @@ export default class ListProjects extends React.Component<Props> {
       getProjects
     } = this.props.projects
     
-    const isCompany = getUser().tipo_pessoa == TipoPessoa.Company;
+    const isCompany = getUser().tipo_pessoa === TipoPessoa.Company;
     if (isCompany) {
       getProjects(getUser().id_pessoa)
     } else {
@@ -66,7 +65,7 @@ export default class ListProjects extends React.Component<Props> {
       filter
     } = this.props.projects
 
-    const isCompany = getUser().tipo_pessoa == TipoPessoa.Company;
+    const isCompany = getUser().tipo_pessoa === TipoPessoa.Company;
 
     return (
       <>

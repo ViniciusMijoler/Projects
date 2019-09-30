@@ -28,3 +28,11 @@ code {
 .ui.thin.left.sidebar, .ui.thin.right.sidebar {
   width: 200px !important;
 }
+
+.row-reverse {
+  flex-direction: row-reverse !important;
+}
+
+.react-datepicker-wrapper {
+  display: block !important;
+}

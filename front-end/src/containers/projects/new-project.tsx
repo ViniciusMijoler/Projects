@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import ProjectsStore from './store';
 import ReactDatePicker from "react-datepicker";
 import { getDate } from '../../util';
+import { getUser } from '../../util/auth.util';
 
 interface Props {
   projects: ProjectsStore
@@ -15,7 +16,8 @@ export default class NewProject extends React.Component<Props>{
     handleSubmit = async (e: any) => {
         e.preventDefault();
         const { handleSubmit } = this.props.projects;
-        handleSubmit();
+        const id_empresa = getUser().id_pessoa;
+        handleSubmit(id_empresa);
     }
 
     render() {

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Container } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import ProjectsStore from './store';
-import './index.css';
 import ListProjects from './list-projects';
 import NewProject from './new-project';
 

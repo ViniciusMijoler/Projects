@@ -26,6 +26,7 @@ type Project struct {
 	AreaProjeto    string         `json:"area_projeto"`
 	DataLimite     string         `json:"data_limite"`
 	Descricao      string         `json:"descricao"`
+	IsFavorite     string         `json:"is_favorite"`
 }
 
 //ProjectFilter struct
@@ -38,14 +39,14 @@ type ProjectFilter struct {
 }
 
 //InsertProject ...
-func (u *Project) InsertProject(db *sql.DB) (string, error) {
+func (p *Project) InsertProject(db *sql.DB) (string, error) {
 	dateNow := time.Now()
 
 	// verify user_name exist
 	count := 0
 	err := db.QueryRow(`SELECT COUNT(*)
 					FROM usuario
-					WHERE user_name = $1`, u.IDEmpresa).Scan(&count)
+					WHERE user_name = $1`, p.IDEmpresa).Scan(&count)
 	if err != nil {
 		return "", err
 	}
@@ -59,11 +60,34 @@ func (u *Project) InsertProject(db *sql.DB) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	err = statement.QueryRow(dateNow, u.Nome, u.IDEmpresa, u.PalavrasChaves, u.AreaProjeto, u.DataLimite, u.Descricao).Scan(&u.ID, &u.Status, &u.DtCadastro)
+	err = statement.QueryRow(dateNow, p.Nome, p.IDEmpresa, p.PalavrasChaves, p.AreaProjeto, p.DataLimite, p.Descricao).Scan(&p.ID, &p.Status, &p.DtCadastro)
 	if err != nil {
 		return "", err
 	}
 	return "", nil
+}
+
+//GetProject ...
+func (p *Project) GetProject(db *sql.DB, idPessoa int64) error {
+	var isCompany bool
+	err := db.QueryRow(`SELECT COUNT(*) > 0
+					FROM pessoa pe
+					WHERE pe.id = $1 AND pe.tipo_pessoa = 0`, idPessoa).Scan(&isCompany)
+
+	if isCompany {
+		err := db.QueryRow(`SELECT p.id, p.status, p.dt_cadastro, COALESCE(CAST(p.dt_atualizacao as varchar), '') as dt_atualizacao, 
+									p.nome, p.id_empresa, pe.apelido, p.palavras_chaves, p.area_projeto, p.data_limite, p.descricao
+						FROM projetos p
+						INNER JOIN 
+						WHERE id =  $1`, p.ID).Scan(&p.Status, &p.DtCadastro, &p.DtAtualizacao)
+		if err != nil {
+			return err
+		}
+	} else {
+
+	}
+
+	return err
 }
 
 // GetProjectsByCompany ...

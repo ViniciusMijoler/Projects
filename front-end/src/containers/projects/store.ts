@@ -1,11 +1,11 @@
 import { action, observable } from 'mobx';
-import { NewProjectInterface } from '../../interfaces/project.interface';
+import { ProjectInterface } from '../../interfaces/project.interface';
 import { assign } from '../../util';
 import { postProject, getProjects } from '../../api/projects.api';
 
 const initialNewProject = {
   nome: '',
-  id_empresa: 1,
+  id_empresa: 0,
   palavras_chaves: '',
   area_projeto: '',
   data_limite: '',
@@ -24,7 +24,7 @@ export default class ProjectsStore {
 
   private _filter: any = null
 
-  @observable newProject: NewProjectInterface = initialNewProject;
+  @observable newProject: ProjectInterface = initialNewProject;
 
   @observable filter: {
     nome_projeto: string;
@@ -72,9 +72,9 @@ export default class ProjectsStore {
     this.getProjects();
   }
 
-  @action handleSubmit = () => {
+  @action handleSubmit = (id_empresa: number) => {
     this.isLoading = true;
-    const data = { ...this.newProject }
+    const data = { ...this.newProject, id_empresa }
     postProject(data)
       .then((res) => {
         console.log(res);

@@ -127,9 +127,14 @@ func GetProject(w http.ResponseWriter, r *http.Request) {
 		t.ResponseWithError(w, http.StatusBadRequest, "Invalid id", "")
 		return
 	}
+	idPessoa, err := strconv.Atoi(vars["id_pessoa"])
+	if err != nil {
+		t.ResponseWithError(w, http.StatusBadRequest, "Invalid id_pessoa", "")
+		return
+	}
 
 	p.ID = int64(id)
-	// err = p.GetProject(db)
+	err = p.GetProject(db, idPessoa)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Printf("[handler/GetProject -  Nao ha Projeto com este ID.")
